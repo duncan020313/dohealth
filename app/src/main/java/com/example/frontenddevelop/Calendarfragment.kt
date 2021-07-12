@@ -20,6 +20,7 @@ import retrofit2.Retrofit
 
 
 val datas = mutableListOf<Fitnessitemdatacalendar>()
+lateinit var date : String
 lateinit var customadapter : calendarfragment_recyclerviewadapter
 class Calendarfragment : Fragment() {
     private lateinit var recyclerview : RecyclerView
@@ -32,6 +33,7 @@ class Calendarfragment : Fragment() {
     private var isFabOpen = false
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
+    //lateinit var date : String
 
     val lowerbody = listOf<String>("바벨 백스쿼트","컨벤셔널 데드리프트","프론트 스쿼트",
         "레그 프레스","레스 컬","레그 익스텐션","덤벨 런지","스모 데드리프트","스탠딩 카프 레이즈",
@@ -96,8 +98,9 @@ class Calendarfragment : Fragment() {
         mCalendarView = view.findViewById(R.id.calendarView)
         mCalendarView.setOnDateChangeListener(OnDateChangeListener { view, year, month, dayOfMonth ->
             // 날짜 선택 이벤트
-            val date = year.toString() + "/" + (month + 1) + "/" + dayOfMonth
+            date = year.toString() + "/" + (month + 1) + "/" + dayOfMonth
             refreshrecyclerview(date)
+
         })
 
 
@@ -126,7 +129,6 @@ class Calendarfragment : Fragment() {
                 }
             }
         }
-
         return view
     }
 
@@ -151,24 +153,23 @@ class Calendarfragment : Fragment() {
     }
 
     private fun refreshrecyclerview(date : String){
-        lateinit var rooms: String
-        var map : HashMap<String, String> = HashMap()
-        map.put("id", "123123") // 전연변수로 설정한 아이
-        map.put("date", date)
+         //dailyReport: List<String>
+        var mapp : HashMap<String, String> = HashMap()
+        mapp.put("id", UserId) // 전연변수로 설정한 아이
+        mapp.put("date", date)
 
-        supplementService.givedata(map).enqueue(object: Callback<List<String>> {
-            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>){
-                if(response.code() == 200){
-                    //rooms = response.body()!!
-                }
-                else if(response.code() == 404){
-                    Log.d("TAG", "reposne coed 404")
+        supplementService.reponsedata(mapp).enqueue(object: Callback<Any> {
+            override fun onResponse(call: Call<Any>, response: Response<Any>){
+                var dailyReport = response.body()!!
+                if(dailyReport != null ) {
+                    Log.d("PRINT", dailyReport.toString())
                 }
             }
-            override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                Log.d("TAG", "onFailure")
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                Log.d("TAG", t.toString())
             }
         })
+
 
         //여기서 날짜 선택하면 그걸 액티비티로 넘겨서 DB에서 새로운 데이터를 받아오기
         //DB에는 현재 추가한 데이터 저장
@@ -195,10 +196,10 @@ class Calendarfragment : Fragment() {
             isFabOpen = true
         }
     }
+
 }
 
 class calendarfragment_recyclerviewadapter(private val context: Context) : RecyclerView.Adapter<calendarfragment_recyclerviewadapter.ViewHolder>() {
-
     var datas = mutableListOf<Fitnessitemdatacalendar>()
     var checkboxlist = mutableListOf<checkboxData>()
     var selectedid = -1

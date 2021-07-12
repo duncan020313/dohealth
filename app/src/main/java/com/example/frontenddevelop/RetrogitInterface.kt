@@ -18,8 +18,8 @@ interface RetrogitInterface {
     @GET("/getnickname")
     fun getRequest(@Body id : String): Call<LoginResult> //give user Id and get user nickname
 
-    @GET("/date")
-    fun givedata(@Body map : HashMap<String, String>): Call<List<String>> //give date and get
+    @POST("/date")
+    fun reponsedata(@Body map : HashMap<String, String>): Call<Any> //give date and get
 
     @GET("/Rank")
     fun getRank(): Call<List<String>> //get user Id List

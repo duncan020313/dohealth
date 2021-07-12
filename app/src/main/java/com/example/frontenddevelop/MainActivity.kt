@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private var calendarfragment = Calendarfragment()
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
+    lateinit var Maindate : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -75,6 +76,7 @@ class MainActivity : AppCompatActivity() {
                 viewPager.currentItem = 2
             }
         }
+
     }
 
     fun addpopupstart() {
@@ -131,17 +133,27 @@ class MainActivity : AppCompatActivity() {
         val mapDailyReport : HashMap<String, Any> = HashMap()
         val inform= datas[customadapter.selectedid].inform
         val name= datas[customadapter.selectedid].name
+        val workoutid= datas[customadapter.selectedid]._id
+        val arr = inform.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
 
-        Workout.put("checked", false)
         Workout.put("workoutname", name)
-        Workout.put("whatIdid", inform)
+        Workout.put("workoutid", workoutid)
+        Workout.put("totalset", arr[1])
+        Workout.put("totalvolume", arr[3])
+        Workout.put("maxweight", arr[5])
+        Workout.put("totalcount", arr[7])
+
         val mapWOlist = mutableListOf(Workout)
 
-        mapDailyReport.put("Date","210712")//현재 날짜로 넣는다.
-        mapDailyReport.put("WorkOutList",mapWOlist)//현재 날짜로 넣는다.
+        mapDailyReport.put("Date", date)//현재 날짜로 넣는다.
+        mapDailyReport.put("WorkOutList",mapWOlist)//현재 날짜로 넣는다
 
-        map.put("id", "1234512") //id 전연변수로 선언해서 사용할것
+        map.put("id", UserId) //id 전연변수로 선언해서 사용할것
         map.put("Report", mapDailyReport)
+        map.put("date", date)
+        map.put("name", name)
+        map.put("workoutlist", mapWOlist)
+
 
         supplementService.postReport(map).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -151,4 +163,5 @@ class MainActivity : AppCompatActivity() {
                 Log.d("TAG", "SUCCESS") }
         })
     }
+
 }

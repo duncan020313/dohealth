@@ -30,3 +30,8 @@ class Report {
     lateinit var id: String
     lateinit var report: String
 }
+
+class dailyReport{
+
+
+}
