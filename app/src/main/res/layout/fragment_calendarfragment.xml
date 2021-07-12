@@ -33,6 +33,22 @@
         android:layout_gravity="center"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/calendarfragment_floatingbutton_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="28dp"
+        android:layout_marginBottom="270dp"
+        android:background="#00FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:src="@drawable/timer"
+        android:tint="#00FFFFFF"
+        android:visibility="invisible"
+        app:backgroundTint="#00FFFFFF"
+        app:fabSize="mini"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/calendarfragment_floatingbutton_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

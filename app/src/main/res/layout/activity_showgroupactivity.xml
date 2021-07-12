@@ -34,6 +34,7 @@
             android:text="하루목표, 최대인원"
             android:layout_marginVertical="5dp"
             android:layout_gravity="center"
+            app:layout_scrollFlags="scroll|snap|enterAlways"
             android:id="@+id/showgroupactivity_inform"
             android:gravity="center"/>
         <TextView
@@ -43,6 +44,7 @@
             android:textSize="7pt"
             android:text="소개글"
             android:layout_marginVertical="5dp"
+            app:layout_scrollFlags="scroll|snap|enterAlways"
             android:gravity="center"/>
         <ProgressBar
             android:id="@+id/showgroupactivity_progressBar"
@@ -66,8 +68,8 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/showgroupactivity_floatingbutton_remove"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="28dp"
         android:layout_marginBottom="180dp"
@@ -81,23 +83,23 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/showgroupactivity_floatingbutton_exit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="28dp"
         android:layout_marginBottom="255dp"
-        android:backgroundTint="#FFFFFF"
         android:background="#FFFFFF"
-        app:backgroundTint="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
         android:src="@drawable/exit"
         android:visibility="invisible"
+        app:backgroundTint="#FFFFFF"
         app:fabSize="mini"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/showgroupactivity_floatingbutton_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="28dp"
         android:layout_marginBottom="110dp"

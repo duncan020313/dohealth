@@ -59,7 +59,7 @@ class global : AppCompatActivity() {
                         UserId = user?.id.toString()
                     }
                 }
-
+                finish()
                 //postID("myuser","myuser.kakaoAccount?.profile?.nickname")
 
             }
@@ -101,7 +101,7 @@ class global : AppCompatActivity() {
             } else if (token != null) {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-
+                finish()
             }
         }
 
@@ -122,6 +122,7 @@ class global : AppCompatActivity() {
                 }
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
+                finish()
             }
         }
 
@@ -133,6 +134,7 @@ class global : AppCompatActivity() {
                     Toast.makeText(this, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
+                    finish()
                 }
             }
         }

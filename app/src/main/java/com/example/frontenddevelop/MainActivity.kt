@@ -2,29 +2,34 @@ package com.example.frontenddevelop
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.text.isDigitsOnly
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.concurrent.timer
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private var calendarfragment = Calendarfragment()
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
+    private var settimer = 60
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -89,6 +94,7 @@ class MainActivity : AppCompatActivity() {
     fun addpopupstart() {
         val intent = Intent(this, Addactivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     fun addgroupstart() {
@@ -99,7 +105,6 @@ class MainActivity : AppCompatActivity() {
     fun showgroupstart(item : Groupdataclass) {
         val intent = Intent(this, Showgroupactivity::class.java)
         intent.putExtra("groupdata", item)
-        Log.e("Break","Log3")
         startActivity(intent)
     }
     fun showpopupSelectcountweight(name : String){
@@ -112,18 +117,21 @@ class MainActivity : AppCompatActivity() {
         builder.setView(dialogView)
             .setPositiveButton("확인") { dialogInterface, i ->
                 /* 확인일 때 main의 View의 값에 dialog View에 있는 값을 적용 */
-                if(counttext.text.toString().isDigitsOnly() && weighttext.text.toString().isDigitsOnly()){
-                    val countdata = counttext.text.toString().toInt()
-                    val weightdata = weighttext.text.toString().toInt()
-                    val str= datas[customadapter.selectedid].inform
-                    val arr = str.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
-                    val totalset = (arr[1].toInt()+1).toString()
-                    val totalvolume =  (arr[3].toInt()+countdata*weightdata).toString()
-                    val maxweight = if(arr[5].toInt() > weightdata) {arr[2]} else {weightdata.toString()}
-                    val totalcount = (arr[7].toInt()+countdata).toString()
-                    customadapter.datas[customadapter.selectedid].inform = "세트 수: "+totalset+"세트 "+"운동볼륨: "+totalvolume+"Kg "+"최대 중량: "+maxweight+"Kg "+"총 개수: "+totalcount+"개"
-                    customadapter.notifyDataSetChanged()
-                    postdatatoDB()
+                if(counttext.text.toString()!="" && weighttext.text.toString() !=""){
+                    if(counttext.text.toString().isDigitsOnly() && weighttext.text.toString().isDigitsOnly()){
+                        val countdata = counttext.text.toString().toInt()
+                        val weightdata = weighttext.text.toString().toInt()
+                        val str= datas[customadapter.selectedid].inform
+                        val arr = str.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
+                        val totalset = (arr[1].toInt()+1).toString()
+                        val totalvolume =  (arr[3].toInt()+countdata*weightdata).toString()
+                        val maxweight = if(arr[5].toInt() > weightdata) {arr[5]} else {weightdata.toString()}
+                        val totalcount = (arr[7].toInt()+countdata).toString()
+                        customadapter.datas[customadapter.selectedid].inform = "세트 수: "+totalset+"세트 "+"운동볼륨: "+totalvolume+"Kg "+"최대 중량: "+maxweight+"Kg "+"총 개수: "+totalcount+"개"
+                        customadapter.notifyDataSetChanged()
+                        postdatatoDB()
+                        starttimerpopup()
+                    }
                 }
             }
             .setNegativeButton("취소") { dialogInterface, i ->
@@ -162,5 +170,49 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Log.d("TAG", "SUCCESS") }
         })
+    }
+
+    fun starttimerpopup(){
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.timerpopuplayout, null)
+        val alterdialog = builder.create()
+        val minute = dialogView.findViewById<TextView>(R.id.timerpopuplayout_minute)
+        val second = dialogView.findViewById<TextView>(R.id.timerpopuplayout_second)
+
+        builder.setView(dialogView)
+            .setNegativeButton("종료") { dialogInterface, i ->
+
+            }.show()
+        val timer = object: CountDownTimer((settimer*1000).toLong(), 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val min = millisUntilFinished/60000
+                val sec = (millisUntilFinished%60000)/1000
+                minute.text = min.toString()
+                second.text = sec.toString()
+            }
+
+            override fun onFinish() {alterdialog.dismiss()}
+        }
+        Log.e("time", "start")
+        timer.start()
+    }
+
+    fun settimerpopupstart(){
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.timersettingpopuplayout, null)
+        val minute = dialogView.findViewById<EditText>(R.id.timersettingpopuplayout_minute)
+        val second = dialogView.findViewById<EditText>(R.id.timersettingpopuplayout_second)
+        builder.setView(dialogView)
+            .setPositiveButton("설정하기") { dialogInterface, i ->
+                if(minute.text.toString().toInt()>60 || second.text.toString().toInt()>60){
+                    Toast.makeText(this, "설정 실패", Toast.LENGTH_SHORT).show()
+                }
+                else {settimer = minute.text.toString().toInt()*60+second.text.toString().toInt()}
+                Log.e("settimer",settimer.toString())
+            }
+            .setNegativeButton("취소") { dialogInterface, i ->
+
+            }
+            .show()
     }
 }

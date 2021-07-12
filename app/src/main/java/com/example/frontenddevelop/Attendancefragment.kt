@@ -27,7 +27,6 @@ class Attendancefragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_attendancefragment, container, false)
-
         //Recyclerview 설정
         recyclerview = view.findViewById<RecyclerView>(R.id.attendancefragment_recyclerview)
         groupadapter = addgroupadapter(requireContext())

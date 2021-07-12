@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
@@ -58,13 +59,20 @@ class Addgroupactivity : AppCompatActivity() {
         builder.setView(dialogView)
             .setPositiveButton("들어가기") { dialogInterface, i ->
                 /* 확인일 때 main의 View의 값에 dialog View에 있는 값을 적용 */
-                groupdatalist.removeLast()
-                groupdatalist.add(item)
-                val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
-                groupdatalist.add(value)
-                groupadapter.notifyDataSetChanged()
-                finish()
+                if(groupdatalist.find{
+                    it._id == item._id
+                    }!=null){Toast.makeText(this, "이미 가입된 그룹입니다", Toast.LENGTH_SHORT).show()
                 }
+                else{
+                    groupdatalist.removeLast()
+                    groupdatalist.add(item)
+                    val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
+                    groupdatalist.add(value)
+                    groupadapter.notifyDataSetChanged()
+                    Toast.makeText(this, "가입되었습니다", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
             .setNegativeButton("취소") { dialogInterface, i ->
                 /* 취소일 때 아무 액션이 없으므로 빈칸 */
         }
@@ -90,7 +98,7 @@ class Addgroupactivity : AppCompatActivity() {
                 val groupthreshold = groupthreshold_text.text.toString()
                 val image = R.drawable.group //원래는 이거 대신에 이미지 가져와야됨
                 //DB에 그룹 데이터 추가해야됨
-                val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+" 하루 목표: "+groupthreshold+"세트", "소개글", image)
+                val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", "소개글", image)
                 groupdatalist.removeLast()
                 groupdatalist.add(newgroup)
                 val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)

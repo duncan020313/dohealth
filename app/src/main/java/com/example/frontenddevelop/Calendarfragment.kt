@@ -21,15 +21,16 @@ import retrofit2.Retrofit
 
 val datas = mutableListOf<Fitnessitemdatacalendar>()
 lateinit var customadapter : calendarfragment_recyclerviewadapter
-class Calendarfragment : Fragment() {
+class Calendarfragment : Fragment(){
     private lateinit var recyclerview : RecyclerView
     private lateinit var mCalendarView : CalendarView
     private lateinit var fab_main : FloatingActionButton
     private lateinit var fab_add : FloatingActionButton
     private lateinit var fab_remove : FloatingActionButton
+    private lateinit var fab_timer : FloatingActionButton
     private lateinit var fab_open : Animation
     private lateinit var fab_close : Animation
-    private var isFabOpen = false
+    var isFabOpen = false
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
 
@@ -74,6 +75,7 @@ class Calendarfragment : Fragment() {
         fab_main = view.findViewById(R.id.calendarfragment_floatingbutton_main)
         fab_add = view.findViewById(R.id.calendarfragment_floatingbutton_add)
         fab_remove = view.findViewById(R.id.calendarfragment_floatingbutton_remove)
+        fab_timer = view.findViewById(R.id.calendarfragment_floatingbutton_timer)
         fab_main.setOnClickListener { view ->
             toggleFab()
         }
@@ -84,6 +86,10 @@ class Calendarfragment : Fragment() {
         fab_remove.setOnClickListener { view ->
             toggleFab()
             removeitems()
+        }
+        fab_timer.setOnClickListener { view ->
+            toggleFab()
+            (activity as MainActivity).settimerpopupstart()
         }
 
 
@@ -106,6 +112,7 @@ class Calendarfragment : Fragment() {
         val checkboxlist = arguments?.getParcelableArrayList<checkboxData>("checkboxlist")
         if (checkboxlist != null) {
             for(i in checkboxlist){
+                if(datas.find{ (it.fitnessid==i.id)}!=null) continue
                 var image : Int
                 var name : String
                 if(i.checked){
@@ -141,7 +148,7 @@ class Calendarfragment : Fragment() {
 
 
     private fun initRecycler() {
-        customadapter = calendarfragment_recyclerviewadapter(requireContext())
+        customadapter = calendarfragment_recyclerviewadapter(requireContext(), this)
         customadapter.datas = datas
         recyclerview.adapter = customadapter
     }
@@ -151,6 +158,7 @@ class Calendarfragment : Fragment() {
         for(i in customadapter.checkboxlist){
             if(i.checked){
                 i.checked=false
+                customadapter.checkednumber--
                 datas.removeAt(customadapter.checkboxlist.indexOf(i)-removecount)
                 removecount++
                 customadapter.notifyDataSetChanged()
@@ -187,28 +195,33 @@ class Calendarfragment : Fragment() {
         supplementService = retrofit.create(RetrogitInterface::class.java)
     }
 
-    private fun toggleFab(){
+    fun toggleFab(){
         if (isFabOpen) {
             fab_add.startAnimation(fab_close)
             fab_remove.startAnimation(fab_close)
+            fab_timer.startAnimation(fab_close)
             fab_add.setClickable(false)
             fab_remove.setClickable(false)
+            fab_timer.setClickable(false)
             isFabOpen = false
         } else {
             fab_add.startAnimation(fab_open)
             fab_remove.startAnimation(fab_open)
+            fab_timer.startAnimation(fab_open)
             fab_add.setClickable(true)
             fab_remove.setClickable(true)
+            fab_timer.setClickable(true)
             isFabOpen = true
         }
     }
 }
 
-class calendarfragment_recyclerviewadapter(private val context: Context) : RecyclerView.Adapter<calendarfragment_recyclerviewadapter.ViewHolder>() {
+class calendarfragment_recyclerviewadapter(private val context: Context, private val fragment : Calendarfragment) : RecyclerView.Adapter<calendarfragment_recyclerviewadapter.ViewHolder>() {
 
     var datas = mutableListOf<Fitnessitemdatacalendar>()
     var checkboxlist = mutableListOf<checkboxData>()
     var selectedid = -1
+    var checkednumber = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.calendarfragment_healthitemlayout,parent,false)
         return ViewHolder(view)
@@ -232,16 +245,23 @@ class calendarfragment_recyclerviewadapter(private val context: Context) : Recyc
         fun bind(item: Fitnessitemdatacalendar, num:Int) {
             name.text = item.name
             inform.text = item.inform
-            imgProfile.setImageDrawable(context!!.resources.getDrawable(item.image_id,context!!.theme))
+            imgProfile.setImageDrawable(context.resources.getDrawable(item.image_id, context.theme))
             if(num >= checkboxlist.size)
                 checkboxlist.add(num, checkboxData(item._id, false))
             checkbox.isChecked = checkboxlist[num].checked
             checkbox.setOnClickListener {
+                if(checkednumber == 0){
+                    fragment.toggleFab()
+                }
+                else if(checkednumber == 1 && checkbox.isChecked == false && fragment.isFabOpen == true){
+                    fragment.toggleFab()
+                }
+                if(checkbox.isChecked == true) checkednumber++
+                else checkednumber--
                 checkboxlist[num].checked = checkbox.isChecked
             }
             itemView.setOnClickListener{
                 selectedid = num
-                Log.e("frag",selectedid.toString())
                 (context as MainActivity).showpopupSelectcountweight(item.name)
             }
         }
