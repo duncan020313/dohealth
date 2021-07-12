@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class Fitnessitemdata(
     val fitnessid: Int,
     val name: String = "",
-    val image: Drawable)
+    val image_id: Int)
 
 @Parcelize
 data class checkboxData(
@@ -22,7 +22,7 @@ data class Fitnessitemdatacalendar(
     val fitnessid: Int, //운동id
     val name: String = "",//운동이름
     var inform: String = "0/0/0/0", //"세트 수/운동볼륨/최대 중량/총 개
-    val image: Drawable)
+    val image_id: Int)
 
 @Parcelize
 data class Groupdataclass(
@@ -30,7 +30,7 @@ data class Groupdataclass(
     val name: String = "",
     val inform: String = "",
     val intro: String = "",
-    val image: Bitmap,
+    val imageid: Int,
 ) : Parcelable
 
 @Parcelize
@@ -39,5 +39,5 @@ data class Userdataclass(
     val name: String,
     val inform: String,
     val intro: String,
-    val profile: Bitmap
+    val profileid: Int
 ): Parcelable

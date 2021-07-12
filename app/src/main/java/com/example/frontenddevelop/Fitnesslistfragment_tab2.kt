@@ -40,7 +40,7 @@ class Fitnesslistfragment_tab2 : Fragment() {
         "중량 딥스","중량 푸시업","힌두 푸시업","아처 푸시업")
         datas.clear()
         for(i in chest){
-            val value = Fitnessitemdata(chest.indexOf(i)+100, i, requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme))
+            val value = Fitnessitemdata(chest.indexOf(i)+100, i, R.drawable.benchpress)
             datas.add(value)
         }
         customadapter.datas = datas

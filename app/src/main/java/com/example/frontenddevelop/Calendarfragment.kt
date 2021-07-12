@@ -106,21 +106,29 @@ class Calendarfragment : Fragment() {
         val checkboxlist = arguments?.getParcelableArrayList<checkboxData>("checkboxlist")
         if (checkboxlist != null) {
             for(i in checkboxlist){
+                var image : Int
+                var name : String
                 if(i.checked){
-                    val name = if(i.id>=500){
-                        cardiovascularexercise[i.id-500]
+                    if(i.id>=500){
+                        name = cardiovascularexercise[i.id-500]
+                        image = R.drawable.running
                     } else if(i.id>=400){
-                        arm[i.id-400]
+                        name = arm[i.id-400]
+                        image = R.drawable.arm
                     } else if(i.id>=300){
-                        shoulder[i.id-300]
+                        name = shoulder[i.id-300]
+                        image = R.drawable.shoulder
                     } else if (i.id>=200){
-                        back[i.id-200]
+                        name = back[i.id-200]
+                        image = R.drawable.pullup
                     } else if (i.id>=100){
-                        chest[i.id-100]
+                        name = chest[i.id-100]
+                        image = R.drawable.benchpress
                     } else{
-                        lowerbody[i.id]
+                        name = lowerbody[i.id]
+                        image = R.drawable.squat
                     }
-                    val value = Fitnessitemdatacalendar(datas.size, i.id, name,"세트 수: "+"0"+"세트 "+"운동볼륨: "+"0"+"Kg "+"최대 중량: "+"0"+"Kg "+"총 개수: "+"0"+"개",requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme))
+                    val value = Fitnessitemdatacalendar(datas.size, i.id, name,"세트 수: "+"0"+"세트 "+"운동볼륨: "+"0"+"Kg "+"최대 중량: "+"0"+"Kg "+"총 개수: "+"0"+"개",image)
                     datas.add(value)
                     customadapter.notifyDataSetChanged()
                 }
@@ -151,7 +159,6 @@ class Calendarfragment : Fragment() {
     }
 
     private fun refreshrecyclerview(date : String){
-        lateinit var rooms: String
         var map : HashMap<String, String> = HashMap()
         map.put("id", "123123") // 전연변수로 설정한 아이
         map.put("date", date)
@@ -225,7 +232,7 @@ class calendarfragment_recyclerviewadapter(private val context: Context) : Recyc
         fun bind(item: Fitnessitemdatacalendar, num:Int) {
             name.text = item.name
             inform.text = item.inform
-            imgProfile.setImageDrawable(item.image)
+            imgProfile.setImageDrawable(context!!.resources.getDrawable(item.image_id,context!!.theme))
             if(num >= checkboxlist.size)
                 checkboxlist.add(num, checkboxData(item._id, false))
             checkbox.isChecked = checkboxlist[num].checked
@@ -235,7 +242,7 @@ class calendarfragment_recyclerviewadapter(private val context: Context) : Recyc
             itemView.setOnClickListener{
                 selectedid = num
                 Log.e("frag",selectedid.toString())
-                (context as MainActivity).showpopupSelectcountweight()
+                (context as MainActivity).showpopupSelectcountweight(item.name)
             }
         }
     }

@@ -11,6 +11,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +41,7 @@ class Groupfragment : Fragment() {
     fun initRecycler(){
         //DB에서 데이터 가져오기
         if(groupdatalist.size==0){
-            val value = Groupdataclass(-1, "Add", "","",requireContext().resources.getDrawable(R.drawable.plus_profile,requireContext().theme).toBitmap())
+            val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
             groupdatalist.add(value)
         }
         groupadapter.groupdatalist = groupdatalist
@@ -74,10 +75,11 @@ class groupfragment_recyclerviewadapter(private val context: Context) : Recycler
         fun bind(item: Groupdataclass, num: Int) {
             groupname.text = item.name
             groupinform.text = item.inform
-            groupimage.setImageBitmap(item.image)
+            groupimage.setImageDrawable(context!!.resources.getDrawable(item.imageid,context!!.theme))
             groupintro.text = item.intro
             itemView.setOnClickListener {
                 if (num < groupdatalist.size - 1) {
+                    Log.e("Break","Log2")
                     (context as MainActivity).showgroupstart(item)
                 } else {
                     (context as MainActivity).addgroupstart()

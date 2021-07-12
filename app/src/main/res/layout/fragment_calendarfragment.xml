@@ -11,12 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:elevation="0dp"
+        app:elevation="0dp"
         android:layout_gravity="center_horizontal">
+
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:background="#00FFFFFF"
+            android:elevation="0dp"
             app:layout_scrollFlags="scroll|snap|enterAlways" />
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.recyclerview.widget.RecyclerView
@@ -34,9 +39,12 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="28dp"
         android:layout_marginBottom="190dp"
-        android:backgroundTint="#E91E63"
+        android:background="#00FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:src="@drawable/remove"
         android:tint="#00FFFFFF"
         android:visibility="invisible"
+        app:backgroundTint="#00FFFFFF"
         app:fabSize="mini"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
 
@@ -47,9 +55,11 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="28dp"
         android:layout_marginBottom="110dp"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="#FFFFFF"
+        android:src="@drawable/add"
         android:tint="#00FFFFFF"
         android:visibility="invisible"
+        app:backgroundTint="#FFFFFF"
         app:fabSize="mini"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
 
@@ -57,7 +67,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fabSize="normal"
+        android:background="#00FFFFFF"
         android:layout_gravity="bottom|end"
+        android:backgroundTint="#FFFFFF"
+        android:src="@drawable/menu"
+        app:backgroundTint="#FFFFFF"
         android:id="@+id/calendarfragment_floatingbutton_main"
         android:layout_margin="20dp"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />

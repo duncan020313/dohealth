@@ -38,7 +38,7 @@ class Fitnesslistfragment_tab6 : Fragment() {
         val cardiovascularexercise = listOf<String>("트레드 밀","싸이클","로잉 머신")
         datas.clear()
         for(i in cardiovascularexercise){
-            val value = Fitnessitemdata(cardiovascularexercise.indexOf(i)+500, i, requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme))
+            val value = Fitnessitemdata(cardiovascularexercise.indexOf(i)+500, i, R.drawable.running)
             datas.add(value)
         }
         customadapter.datas = datas

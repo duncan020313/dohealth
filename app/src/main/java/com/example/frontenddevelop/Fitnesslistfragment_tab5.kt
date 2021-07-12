@@ -39,7 +39,7 @@ class Fitnesslistfragment_tab5 : Fragment() {
         "스컬 크러셔","바벨 리스트 컬")
         datas.clear()
         for(i in arm){
-            val value = Fitnessitemdata(arm.indexOf(i)+400, i, requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme))
+            val value = Fitnessitemdata(arm.indexOf(i)+400, i, R.drawable.arm)
             datas.add(value)
         }
         customadapter.datas = datas

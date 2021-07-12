@@ -10,6 +10,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 
 class Attendancefragment : Fragment() {
@@ -40,7 +41,7 @@ class Attendancefragment : Fragment() {
         //여기서 db에서 데이터 받아오면 됩니다.
         val groupdatalist = mutableListOf<Groupdataclass>()
         for (i in 1..10){
-            val value = Groupdataclass(i, i.toString(), "Hello","Hi",requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme).toBitmap())
+            val value = Groupdataclass(i, i.toString(), "Hello","Hi",R.drawable.group)
             groupdatalist.add(value)
         }
         groupadapter.groupdatalist = groupdatalist
@@ -74,7 +75,7 @@ class addgroupadapter(private val context: Context) : RecyclerView.Adapter<addgr
         fun bind(item: Groupdataclass, num:Int) {
             groupname.text = item.name
             groupinform.text = item.inform
-            groupimage.setImageBitmap(item.image)
+            groupimage.setImageDrawable(context!!.resources.getDrawable(item.imageid,context!!.theme))
             groupintro.text = item.intro
             itemView.setOnClickListener{
                 (context as Addgroupactivity).joingrouppopupstart(item)

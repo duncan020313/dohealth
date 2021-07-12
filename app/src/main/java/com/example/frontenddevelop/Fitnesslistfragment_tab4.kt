@@ -41,7 +41,7 @@ class Fitnesslistfragment_tab4 : Fragment() {
         "숄더 프레스 머신","이지바 업라이트 로우","핸드 스탠드","푸시 프레스","덤벨 업라이트 로우")
         datas.clear()
         for(i in shoulder){
-            val value = Fitnessitemdata(shoulder.indexOf(i)+300, i, requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme))
+            val value = Fitnessitemdata(shoulder.indexOf(i)+300, i, R.drawable.shoulder)
             datas.add(value)
         }
         customadapter.datas = datas

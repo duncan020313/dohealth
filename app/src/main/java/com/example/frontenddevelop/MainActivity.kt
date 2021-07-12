@@ -3,7 +3,10 @@ package com.example.frontenddevelop
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
@@ -11,6 +14,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,9 +32,8 @@ class MainActivity : AppCompatActivity() {
         initRetrofit()
 
         //Action bar 설정하기
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        val actionBar = supportActionBar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setActionBar(toolbar)
         actionBar?.setDisplayShowCustomEnabled(true)
         actionBar?.setDisplayShowTitleEnabled(false)//기본 제목을 없애줍니다.
 
@@ -43,11 +46,11 @@ class MainActivity : AppCompatActivity() {
         viewPager.currentItem = 1
         var tablayout = findViewById<TabLayout>(R.id.tabLayout)
         TabLayoutMediator(tablayout, viewPager){tab, position->
-            tab.text = when(position){
-                0 -> "랭킹"
-                1 -> "운동일지"
-                2 -> "그룹"
-                else -> "none"
+            tab.icon = when(position){
+                0 -> getDrawable(R.drawable.rank)
+                1 -> getDrawable(R.drawable.journal)
+                2 -> getDrawable(R.drawable.group)
+                else -> null
             }
         }.attach()
 
@@ -67,13 +70,19 @@ class MainActivity : AppCompatActivity() {
             }
             val joingroupdata = intent.getParcelableExtra<Groupdataclass>("joingroup")
             if(joingroupdata!=null){
-                groupdatalist.removeLast()
-                groupdatalist.add(joingroupdata)
-                val value = Groupdataclass(-1, "Add", "","",baseContext.resources.getDrawable(R.drawable.plus_profile,baseContext.theme).toBitmap())
-                groupdatalist.add(value)
-                groupadapter.notifyDataSetChanged()
+
                 viewPager.currentItem = 2
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) : Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                Log.e("Homebutton", "Clicked")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -90,13 +99,16 @@ class MainActivity : AppCompatActivity() {
     fun showgroupstart(item : Groupdataclass) {
         val intent = Intent(this, Showgroupactivity::class.java)
         intent.putExtra("groupdata", item)
+        Log.e("Break","Log3")
         startActivity(intent)
     }
-    fun showpopupSelectcountweight(){
+    fun showpopupSelectcountweight(name : String){
         val builder = AlertDialog.Builder(this)
         val dialogView = layoutInflater.inflate(R.layout.selectcountweightpopuplayout, null)
+        val title = dialogView.findViewById<TextView>(R.id.selectcountweightpopup_textview)
         val counttext = dialogView.findViewById<EditText>(R.id.selectcountweightpopup_count)
         val weighttext = dialogView.findViewById<EditText>(R.id.selectcountweightpopup_weight)
+        title.text = name
         builder.setView(dialogView)
             .setPositiveButton("확인") { dialogInterface, i ->
                 /* 확인일 때 main의 View의 값에 dialog View에 있는 값을 적용 */
