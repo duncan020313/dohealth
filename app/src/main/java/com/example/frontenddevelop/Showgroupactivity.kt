@@ -148,7 +148,6 @@ class Useradapter(private val context: Context) : RecyclerView.Adapter<Useradapt
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         private val username: TextView = itemView.findViewById(R.id.useritemlayout_username)
         private val userinform: TextView = itemView.findViewById(R.id.useritemlayout_inform)
         private val userimage: ImageView = itemView.findViewById(R.id.useritemlayout_image)

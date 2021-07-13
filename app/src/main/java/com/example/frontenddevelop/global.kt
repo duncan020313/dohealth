@@ -32,8 +32,6 @@ class global : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.global_activity)
 
-
-
         val keyHash = Utility.getKeyHash(this)
         Log.d("Hash", keyHash)
         //KakaoSdk.init(this, getString(R.string.kakao_app_key))

@@ -17,9 +17,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 val datas = mutableListOf<Fitnessitemdatacalendar>()
+lateinit var date : String
 lateinit var customadapter : calendarfragment_recyclerviewadapter
 class Calendarfragment : Fragment(){
     private lateinit var recyclerview : RecyclerView
@@ -33,6 +38,7 @@ class Calendarfragment : Fragment(){
     var isFabOpen = false
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
+    //lateinit var date : String
 
     val lowerbody = listOf<String>("바벨 백스쿼트","컨벤셔널 데드리프트","프론트 스쿼트",
         "레그 프레스","레스 컬","레그 익스텐션","덤벨 런지","스모 데드리프트","스탠딩 카프 레이즈",
@@ -102,10 +108,14 @@ class Calendarfragment : Fragment(){
         mCalendarView = view.findViewById(R.id.calendarView)
         mCalendarView.setOnDateChangeListener(OnDateChangeListener { view, year, month, dayOfMonth ->
             // 날짜 선택 이벤트
-            val date = year.toString() + "/" + (month + 1) + "/" + dayOfMonth
+            date = year.toString() + "/" + (month + 1) + "/" + dayOfMonth
             refreshrecyclerview(date)
-        })
 
+        })
+        val sdf = SimpleDateFormat("yyyy/MM/dd")
+        val selectedDate: String = sdf.format(Date(mCalendarView.getDate()))
+        date = selectedDate
+        Log.e("date",date)
 
         //bundle에서 데이터 받기(운동 추가하는 경우)
         //각 탭별로 운동을 구별하기 위해서 운동 id에다가 각각 100, 200, 300, .. 을 더해줘서 구별함
@@ -139,13 +149,11 @@ class Calendarfragment : Fragment(){
                     datas.add(value)
                     customadapter.notifyDataSetChanged()
                 }
+
             }
         }
-
         return view
     }
-
-
 
     private fun initRecycler() {
         customadapter = calendarfragment_recyclerviewadapter(requireContext(), this)
@@ -167,21 +175,23 @@ class Calendarfragment : Fragment(){
     }
 
     private fun refreshrecyclerview(date : String){
-        var map : HashMap<String, String> = HashMap()
-        map.put("id", "123123") // 전연변수로 설정한 아이
-        map.put("date", date)
+        lateinit var dailyReport: ArrayList<String>
+        lateinit var dateprint : String
+        lateinit var datalist : ArrayList<HashMap<String, Any>>
+        var mapp : HashMap<String, String> = HashMap()
+        mapp.put("id", UserId) // 전연변수로 설정한 아이
+        mapp.put("date", date)
 
-        supplementService.givedata(map).enqueue(object: Callback<List<String>> {
-            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>){
-                if(response.code() == 200){
-                    //rooms = response.body()!!
-                }
-                else if(response.code() == 404){
-                    Log.d("TAG", "reposne coed 404")
+        supplementService.reponsedata(mapp).enqueue(object: Callback<ArrayList<String>> {
+            override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
+                //Log.d("Tag", dailyReport[0])
+                if(response.code() == 200) {
+                    dailyReport = response.body()!!
+                    Log.d("Tag", dailyReport[0])
                 }
             }
-            override fun onFailure(call: Call<List<String>>, t: Throwable) {
-                Log.d("TAG", "onFailure")
+            override fun onFailure(call: Call<ArrayList<String>>, t: Throwable) {
+                Log.d("TAG", t.toString())
             }
         })
 
@@ -214,7 +224,9 @@ class Calendarfragment : Fragment(){
             isFabOpen = true
         }
     }
+
 }
+
 
 class calendarfragment_recyclerviewadapter(private val context: Context, private val fragment : Calendarfragment) : RecyclerView.Adapter<calendarfragment_recyclerviewadapter.ViewHolder>() {
 

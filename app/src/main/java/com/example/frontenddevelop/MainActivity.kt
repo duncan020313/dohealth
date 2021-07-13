@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     private var calendarfragment = Calendarfragment()
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
+    lateinit var Maindate : String
+    private var settimer = 60
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -79,6 +81,7 @@ class MainActivity : AppCompatActivity() {
                 viewPager.currentItem = 2
             }
         }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem) : Boolean {
@@ -130,7 +133,7 @@ class MainActivity : AppCompatActivity() {
                         customadapter.datas[customadapter.selectedid].inform = "세트 수: "+totalset+"세트 "+"운동볼륨: "+totalvolume+"Kg "+"최대 중량: "+maxweight+"Kg "+"총 개수: "+totalcount+"개"
                         customadapter.notifyDataSetChanged()
                         postdatatoDB()
-                        starttimerpopup()
+                        //starttimerpopup()
                     }
                 }
             }
@@ -146,22 +149,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun postdatatoDB(){
-        val map : HashMap<String, Any> = HashMap()
-        val Workout: HashMap<String, Any> = HashMap()
-        val mapDailyReport : HashMap<String, Any> = HashMap()
+        val map : HashMap<String, String> = HashMap()
+        val Workout: HashMap<String, String> = HashMap()
         val inform= datas[customadapter.selectedid].inform
         val name= datas[customadapter.selectedid].name
+        val workoutid= datas[customadapter.selectedid]._id
+        //val arr = inform.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
 
-        Workout.put("checked", false)
-        Workout.put("workoutname", name)
-        Workout.put("whatIdid", inform)
-        val mapWOlist = mutableListOf(Workout)
+        //Workout.put("workoutname", name.toString())
+        //Workout.put("workoutid", workoutid.toString())
+        //Workout.put("totalset", arr[1].toString())
+        //Workout.put("totalvolume", arr[3].toString())
+        //Workout.put("maxweight", arr[5].toString())
+        //Workout.put("totalcount", arr[7].toString())
 
-        mapDailyReport.put("Date","210712")//현재 날짜로 넣는다.
-        mapDailyReport.put("WorkOutList",mapWOlist)//현재 날짜로 넣는다.
+        map.put("id", UserId) //id 전연변수로 선언해서 사용할것
+        map.put("Report", (date+"#"+ inform+"#"+name+"#"+workoutid).toString())
 
-        map.put("id", "1234512") //id 전연변수로 선언해서 사용할것
-        map.put("Report", mapDailyReport)
+        map.put("date", date)
+        map.put("name", name)
+
 
         supplementService.postReport(map).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
