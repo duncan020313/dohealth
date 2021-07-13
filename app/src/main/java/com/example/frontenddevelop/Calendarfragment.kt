@@ -34,8 +34,6 @@ class Calendarfragment : Fragment(){
     var isFabOpen = false
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
-    //lateinit var date : String
-
     val lowerbody = listOf<String>("바벨 백스쿼트","컨벤셔널 데드리프트","프론트 스쿼트",
         "레그 프레스","레스 컬","레그 익스텐션","덤벨 런지","스모 데드리프트","스탠딩 카프 레이즈",
         "이너 싸이 머신","에어 스쿼트","런지","루마니안 데드리프트","점프 스쿼트","저처 스쿼트",
@@ -169,28 +167,33 @@ class Calendarfragment : Fragment(){
 
     private fun refreshrecyclerview(date : String){
         lateinit var dailyReport: ArrayList<String>
-        lateinit var dateprint : String
-        lateinit var datalist : ArrayList<HashMap<String, Any>>
         var mapp : HashMap<String, String> = HashMap()
         mapp.put("id", UserId) // 전연변수로 설정한 아이
         mapp.put("date", date)
 
         supplementService.reponsedata(mapp).enqueue(object: Callback<ArrayList<String>> {
             override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
-                //Log.d("Tag", dailyReport[0])
                 if(response.code() == 200) {
                     dailyReport = response.body()!!
                     Log.d("Tag", dailyReport[0])
                 }
             }
             override fun onFailure(call: Call<ArrayList<String>>, t: Throwable) {
-                Log.d("TAG", t.toString())
+                Log.d("TAGTAG", t.toString())
             }
         })
 
         //여기서 날짜 선택하면 그걸 액티비티로 넘겨서 DB에서 새로운 데이터를 받아오기
         //DB에는 현재 추가한 데이터 저장
-        //(activity as MainActivity).getDatafromDB()
+        for(i in dailyReport){
+            if (i== "none"){
+
+            }
+            else {
+                val parsed = i.split("#","세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
+                Log.e("parsed",parsed.toString())
+            }
+        }
     }
 
     private fun initRetrofit(){
