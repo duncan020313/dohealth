@@ -128,31 +128,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun postdatatoDB(){
-        val map : HashMap<String, Any> = HashMap()
-        val Workout: HashMap<String, Any> = HashMap()
-        val mapDailyReport : HashMap<String, Any> = HashMap()
+        val map : HashMap<String, String> = HashMap()
+        val Workout: HashMap<String, String> = HashMap()
         val inform= datas[customadapter.selectedid].inform
         val name= datas[customadapter.selectedid].name
         val workoutid= datas[customadapter.selectedid]._id
-        val arr = inform.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
+        //val arr = inform.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
 
-        Workout.put("workoutname", name)
-        Workout.put("workoutid", workoutid)
-        Workout.put("totalset", arr[1])
-        Workout.put("totalvolume", arr[3])
-        Workout.put("maxweight", arr[5])
-        Workout.put("totalcount", arr[7])
-
-        val mapWOlist = mutableListOf(Workout)
-
-        mapDailyReport.put("Date", date)//현재 날짜로 넣는다.
-        mapDailyReport.put("WorkOutList",mapWOlist)//현재 날짜로 넣는다
+        //Workout.put("workoutname", name.toString())
+        //Workout.put("workoutid", workoutid.toString())
+        //Workout.put("totalset", arr[1].toString())
+        //Workout.put("totalvolume", arr[3].toString())
+        //Workout.put("maxweight", arr[5].toString())
+        //Workout.put("totalcount", arr[7].toString())
 
         map.put("id", UserId) //id 전연변수로 선언해서 사용할것
-        map.put("Report", mapDailyReport)
+        map.put("Report", (date+"#"+ inform+"#"+name+"#"+workoutid).toString())
+
         map.put("date", date)
         map.put("name", name)
-        map.put("workoutlist", mapWOlist)
 
 
         supplementService.postReport(map).enqueue(object: Callback<Void> {

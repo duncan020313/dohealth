@@ -31,7 +31,6 @@ class Showgroupactivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_showgroupactivity)
 
-
         //intent받기
         if(intent!=null){
             val gd = intent.getParcelableExtra<Groupdataclass>("groupdata")
