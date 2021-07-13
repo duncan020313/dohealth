@@ -123,18 +123,7 @@ class Addgroupactivity : AppCompatActivity() {
                 val image = R.drawable.group //원래는 이거 대신에 이미지 가져와야됨
                 val groupintro = groupintro.text.toString()
                 //DB에 그룹 데이터 추가해야됨
-<<<<<<< HEAD
-
-
-                val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", "소개글", image)
-                groupdatalist.removeLast()
-                groupdatalist.add(newgroup)
-
-                val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
-
-=======
                 val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", groupintro, image)
->>>>>>> 2f866dd5f546fb930e7257d5c4a2c1a8cd7b0613
                 Log.d("Breakpoint 1","")
                 var map : HashMap<String, String> = HashMap()
 
@@ -151,14 +140,9 @@ class Addgroupactivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         Log.d("TAG", "SUCCESS") }
                 })
-<<<<<<< HEAD
-
-
-=======
                 groupdatalist.removeLast()
                 groupdatalist.add(newgroup)
                 val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
->>>>>>> 2f866dd5f546fb930e7257d5c4a2c1a8cd7b0613
                 groupdatalist.add(value)
                 groupadapter.notifyDataSetChanged()
                 Log.d("Breakpoint 2","")
