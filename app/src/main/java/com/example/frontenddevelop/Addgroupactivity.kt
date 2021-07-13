@@ -87,6 +87,7 @@ class Addgroupactivity : AppCompatActivity() {
         val groupnumber_text = dialogView.findViewById<EditText>(R.id.creategrouppopup_number)
         val groupthreshold_text = dialogView.findViewById<EditText>(R.id.creategrouppopup_threshold)
         val groupprofile_imagebutton = dialogView.findViewById<ImageButton>(R.id.creategrouppopup_profile)
+        val groupintro = dialogView.findViewById<EditText>(R.id.creategrouppopup_intro)
         groupprofile_imagebutton.setOnClickListener {
             //이미지 불러오기
             Log.e("clicked","이미지 가져오기")
@@ -98,8 +99,9 @@ class Addgroupactivity : AppCompatActivity() {
                 val groupnumber = groupnumber_text.text.toString()
                 val groupthreshold = groupthreshold_text.text.toString()
                 val image = R.drawable.group //원래는 이거 대신에 이미지 가져와야됨
+                val groupintro = groupintro.text.toString()
                 //DB에 그룹 데이터 추가해야됨
-                val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", "소개글", image)
+                val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", groupintro, image)
                 groupdatalist.removeLast()
                 groupdatalist.add(newgroup)
                 val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
