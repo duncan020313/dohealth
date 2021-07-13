@@ -47,8 +47,18 @@ class Groupfragment : Fragment() {
 
     fun initRecycler(){
 
+        if(groupdatalist.size==0){
+            val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
+            groupdatalist.add(value)
+        }
+        groupadapter.groupdatalist = groupdatalist
+        recyclerview.adapter = groupadapter
+        groupadapter.notifyDataSetChanged()
         var grouplist: ArrayList<String>
-        Service.myGroup(UserId).enqueue(object: Callback<ArrayList<String>> {
+        var map : HashMap<String, String> = HashMap()
+        map.put("id" , UserId )
+        Log.e("breakpoint1",UserId)
+        Service.myGroup(map).enqueue(object: Callback<ArrayList<String>> {
             override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
                 if(response.code() == 200) {
                     grouplist = response.body()!!
@@ -59,15 +69,6 @@ class Groupfragment : Fragment() {
                 Log.d("TAG", t.toString())
             }
         })
-
-
-        if(groupdatalist.size==0){
-            val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
-            groupdatalist.add(value)
-        }
-        groupadapter.groupdatalist = groupdatalist
-        recyclerview.adapter = groupadapter
-        groupadapter.notifyDataSetChanged()
     }
 
     private fun initRetrofit(){

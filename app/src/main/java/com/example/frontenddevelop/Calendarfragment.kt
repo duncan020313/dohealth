@@ -170,7 +170,7 @@ class Calendarfragment : Fragment(){
     private fun refreshrecyclerview(date : String){
         lateinit var dailyReport: ArrayList<String>
         var mapp : HashMap<String, String> = HashMap()
-        mapp.put("id", UserId) // 전연변수로 설정한 아이
+        mapp.put("id", UserId.toString()) // 전연변수로 설정한 아이
         mapp.put("date", date)
 
         supplementService.reponsedata(mapp).enqueue(object: Callback<ArrayList<String>> {
