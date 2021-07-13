@@ -23,6 +23,25 @@ class Addactivity : AppCompatActivity(), View.OnClickListener, OnDataPass {
     private lateinit var closebutton: Button
     lateinit var viewPager : ViewPager2
     lateinit var checkboxlist : ArrayList<checkboxData>
+    val lowerbody = listOf<String>("바벨 백스쿼트","컨벤셔널 데드리프트","프론트 스쿼트",
+        "레그 프레스","레스 컬","레그 익스텐션","덤벨 런지","스모 데드리프트","스탠딩 카프 레이즈",
+        "이너 싸이 머신","에어 스쿼트","런지","루마니안 데드리프트","점프 스쿼트","저처 스쿼트",
+        "바벨 스플릿 스쿼트","중량 스텝업")
+    val chest = listOf<String>("벤치 프레스","인클라인 벤치프레스","덤벨 벤치프레스","딥스",
+        "덤벨플라이","케이플 크로스오버","체스트 프레스 머신","펙덱 플라이 머신",
+        "푸시업","인클라인 덤벨 플라이","덤벨 풀오버","인클라인 벤치프레스 머신",
+        "중량 딥스","중량 푸시업","힌두 푸시업","아처 푸시업")
+    val back = listOf<String>("풀업","바벨 로우","덤벨 로우","펜들레이 로우","시티드 로우 머신","렛풀 다운"
+        ,"친업","백 익스텐션","시티드 케이블 로우","원암 덤벨 로우","중량 풀업","인클라인 바벨 로우","인버티드 로우",
+        "바벨 풀오버","백 익스텐션","중량 하이퍼 익스텐션")
+    val shoulder = listOf<String>("오버헤드 프레스","덤벨 숄더 프레스","덤벨 레터럴 레이즈","덤벨 프론트 레이즈",
+        "덤벨 슈러그","비하인드 넥 프레스","페이스 풀","핸드스탠드 푸시업","케이블 리버스 플라이",
+        "바벨 업라이트 로우","벤트오버 덤벨 레터럴 레이즈","아놀드 덤벨 프레스",
+        "숄더 프레스 머신","이지바 업라이트 로우","핸드 스탠드","푸시 프레스","덤벨 업라이트 로우")
+    val arm = listOf<String>("바벨 컬","덤벨 컬","덤벨 삼두 익스텐션","덤벨 킥백","덤벨 리스트 컬","덤벨 해머 컬",
+        "케이블 푸시 다운","클로즈그립 푸시업","이지바 컬","케이블 컬","케이블 삼두 익스텐션","시티드 덤벨 익스텐션",
+        "스컬 크러셔","바벨 리스트 컬")
+    val cardiovascularexercise = listOf<String>("트레드 밀","싸이클","로잉 머신")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_addactivity2)
@@ -59,9 +78,41 @@ class Addactivity : AppCompatActivity(), View.OnClickListener, OnDataPass {
             if(supportFragmentManager.findFragmentByTag("f4")!=null) {(supportFragmentManager.findFragmentByTag("f4") as Fitnesslistfragment_tab5).sendDatas()}
             if(supportFragmentManager.findFragmentByTag("f5")!=null) {(supportFragmentManager.findFragmentByTag("f5") as Fitnesslistfragment_tab6).sendDatas()}
 
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putParcelableArrayListExtra("checkboxlist", checkboxlist)
-            startActivity(intent)
+            for(i in checkboxlist){
+                if(fitnessitemdatas.find{ (it.fitnessid==i.id)}!=null) continue
+                var image : Int
+                var name : String
+                if(i.checked) {
+                    if (i.id >= 500) {
+                        name = cardiovascularexercise[i.id - 500]
+                        image = R.drawable.running
+                    } else if (i.id >= 400) {
+                        name = arm[i.id - 400]
+                        image = R.drawable.arm
+                    } else if (i.id >= 300) {
+                        name = shoulder[i.id - 300]
+                        image = R.drawable.shoulder
+                    } else if (i.id >= 200) {
+                        name = back[i.id - 200]
+                        image = R.drawable.pullup
+                    } else if (i.id >= 100) {
+                        name = chest[i.id - 100]
+                        image = R.drawable.benchpress
+                    } else {
+                        name = lowerbody[i.id]
+                        image = R.drawable.squat
+                    }
+                    val value = Fitnessitemdatacalendar(
+                        fitnessitemdatas.size,
+                        i.id,
+                        name,
+                        "세트 수: " + "0" + "세트 " + "운동볼륨: " + "0" + "Kg " + "최대 중량: " + "0" + "Kg " + "총 개수: " + "0" + "개",
+                        image
+                    )
+                    fitnessitemdatas.add(value)
+                    fitnessitemcustomadapter.notifyDataSetChanged()
+                }
+            }
             finish()
         }
     }

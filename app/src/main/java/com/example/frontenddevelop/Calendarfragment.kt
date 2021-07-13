@@ -17,11 +17,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
-val datas = mutableListOf<Fitnessitemdatacalendar>()
+val fitnessitemdatas = mutableListOf<Fitnessitemdatacalendar>()
 lateinit var date : String
-lateinit var customadapter : calendarfragment_recyclerviewadapter
+lateinit var fitnessitemcustomadapter : calendarfragment_recyclerviewadapter
 class Calendarfragment : Fragment(){
     private lateinit var recyclerview : RecyclerView
     private lateinit var mCalendarView : CalendarView
@@ -102,18 +106,22 @@ class Calendarfragment : Fragment(){
         mCalendarView = view.findViewById(R.id.calendarView)
         mCalendarView.setOnDateChangeListener(OnDateChangeListener { view, year, month, dayOfMonth ->
             // 날짜 선택 이벤트
-            date = year.toString() + "/" + (month + 1) + "/" + dayOfMonth
-            refreshrecyclerview(date)
-
+            var day = dayOfMonth.toString()
+            var mon = (month+1).toString()
+            if(day.length==1) {day = "0"+day}
+            if(mon.length==1) {mon = "0"+mon}
+            date = year.toString() + "/" + mon + "/" + day
+            refreshrecyclerview()
         })
-
+        val sdf = SimpleDateFormat("yyyy/MM/dd")
+        date = sdf.format(Date(mCalendarView.getDate()))
 
         //bundle에서 데이터 받기(운동 추가하는 경우)
         //각 탭별로 운동을 구별하기 위해서 운동 id에다가 각각 100, 200, 300, .. 을 더해줘서 구별함
         val checkboxlist = arguments?.getParcelableArrayList<checkboxData>("checkboxlist")
         if (checkboxlist != null) {
             for(i in checkboxlist){
-                if(datas.find{ (it.fitnessid==i.id)}!=null) continue
+                if(fitnessitemdatas.find{ (it.fitnessid==i.id)}!=null) continue
                 var image : Int
                 var name : String
                 if(i.checked){
@@ -136,9 +144,9 @@ class Calendarfragment : Fragment(){
                         name = lowerbody[i.id]
                         image = R.drawable.squat
                     }
-                    val value = Fitnessitemdatacalendar(datas.size, i.id, name,"세트 수: "+"0"+"세트 "+"운동볼륨: "+"0"+"Kg "+"최대 중량: "+"0"+"Kg "+"총 개수: "+"0"+"개",image)
-                    datas.add(value)
-                    customadapter.notifyDataSetChanged()
+                    val value = Fitnessitemdatacalendar(fitnessitemdatas.size, i.id, name,"세트 수: "+"0"+"세트 "+"운동볼륨: "+"0"+"Kg "+"최대 중량: "+"0"+"Kg "+"총 개수: "+"0"+"개",image)
+                    fitnessitemdatas.add(value)
+                    fitnessitemcustomadapter.notifyDataSetChanged()
                 }
 
             }
@@ -147,35 +155,63 @@ class Calendarfragment : Fragment(){
     }
 
     private fun initRecycler() {
-        customadapter = calendarfragment_recyclerviewadapter(requireContext(), this)
-        customadapter.datas = datas
-        recyclerview.adapter = customadapter
+        fitnessitemcustomadapter = calendarfragment_recyclerviewadapter(requireContext(), this)
+        fitnessitemcustomadapter.datas = fitnessitemdatas
+        recyclerview.adapter = fitnessitemcustomadapter
     }
 
     private fun removeitems(){
         var removecount=0;
-        for(i in customadapter.checkboxlist){
+        for(i in fitnessitemcustomadapter.checkboxlist){
             if(i.checked){
                 i.checked=false
-                customadapter.checkednumber--
-                datas.removeAt(customadapter.checkboxlist.indexOf(i)-removecount)
+                fitnessitemcustomadapter.checkednumber--
+                fitnessitemdatas.removeAt(fitnessitemcustomadapter.checkboxlist.indexOf(i)-removecount)
                 removecount++
-                customadapter.notifyDataSetChanged()
+                fitnessitemcustomadapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun refreshrecyclerview(date : String){
+    private fun refreshrecyclerview(){
         lateinit var dailyReport: ArrayList<String>
+        Log.d("breakpoint 1", "fffff")
         var mapp : HashMap<String, String> = HashMap()
         mapp.put("id", UserId) // 전연변수로 설정한 아이
         mapp.put("date", date)
-
+        Log.d("breakpoint 2", date)
         supplementService.reponsedata(mapp).enqueue(object: Callback<ArrayList<String>> {
             override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
                 if(response.code() == 200) {
                     dailyReport = response.body()!!
+                    fitnessitemdatas.clear()
                     Log.d("Tag", dailyReport[0])
+                    for(i in dailyReport){
+                        if (i== "none"){
+                            fitnessitemcustomadapter.notifyDataSetChanged()
+                        }
+                        else {
+                            val parsed = i.split("#","세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
+                            Log.e("kk",parsed.toString())
+                            val image = if(parsed[11].toInt()>500){
+                                R.drawable.running
+                            }else if(parsed[11].toInt()>400){
+                                R.drawable.arm
+                            }else if(parsed[11].toInt()>300){
+                                R.drawable.shoulder
+                            }else if(parsed[11].toInt()>200){
+                                R.drawable.pullup
+                            }else if(parsed[11].toInt()>100){
+                                R.drawable.benchpress
+                            }else{
+                                R.drawable.squat
+                            }
+
+                            val newval = Fitnessitemdatacalendar(parsed[11].toInt(), fitnessitemdatas.size, parsed[10], "세트 수: "+parsed[2]+"세트 운동볼륨: "+parsed[4]+"Kg 최대 중량: "+parsed[6]+"Kg 총 개수: "+parsed[8]+"개",image)
+                            fitnessitemdatas.add(newval)
+                            fitnessitemcustomadapter.notifyDataSetChanged()
+                        }
+                    }
                 }
             }
             override fun onFailure(call: Call<ArrayList<String>>, t: Throwable) {
@@ -184,15 +220,7 @@ class Calendarfragment : Fragment(){
         })
         //여기서 날짜 선택하면 그걸 액티비티로 넘겨서 DB에서 새로운 데이터를 받아오기
         //DB에는 현재 추가한 데이터 저장
-        for(i in dailyReport){
-            if (i== "none"){
 
-            }
-            else {
-                val parsed = i.split("#","세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
-                Log.e("parsed",parsed.toString())
-            }
-        }
     }
 
     private fun initRetrofit(){

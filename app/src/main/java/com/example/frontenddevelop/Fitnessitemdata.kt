@@ -16,9 +16,9 @@ data class checkboxData(
     var id: Int,
     var checked: Boolean) : Parcelable
 
-//val datas = mutableListOf<Fitnessitemdatacalendar>()
+//val fitnessitemdatas = mutableListOf<Fitnessitemdatacalendar>()
 data class Fitnessitemdatacalendar(
-    val _id: Int, //datas.size //
+    val _id: Int, //fitnessitemdatas.size //
     val fitnessid: Int, //운동id
     val name: String = "",//운동이름
     var inform: String = "0/0/0/0", //"세트 수/운동볼륨/최대 중량/총 개
