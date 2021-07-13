@@ -36,7 +36,7 @@ class Newgroupfragment : Fragment() {
         //여기서 db에서 데이터 받아오면 됩니다.
         val groupdatalist = mutableListOf<Groupdataclass>()
         for (i in 1..10){
-            val value = Groupdataclass(i, i.toString(), "Hello","Hi",requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme).toBitmap())
+            val value = Groupdataclass(i, i.toString(), "Hello","Hi",R.drawable.group)
             groupdatalist.add(value)
         }
         groupadapter.groupdatalist = groupdatalist

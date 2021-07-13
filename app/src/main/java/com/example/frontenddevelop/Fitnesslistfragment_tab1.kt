@@ -40,7 +40,7 @@ class Fitnesslistfragment_tab1 : Fragment() {
             "바벨 스플릿 스쿼트","중량 스텝업")
         datas.clear()
         for(i in lowerbody){
-            val value = Fitnessitemdata(lowerbody.indexOf(i), i, requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme))
+            val value = Fitnessitemdata(lowerbody.indexOf(i), i, R.drawable.squat)
             datas.add(value)
         }
         customadapter.datas = datas
@@ -89,7 +89,7 @@ class CustomAdapter(private val context: Context) : RecyclerView.Adapter<CustomA
 
         fun bind(item: Fitnessitemdata, num:Int) {
             txtName.text = item.name
-            imgProfile.setImageDrawable(item.image)
+            imgProfile.setImageDrawable(context.resources.getDrawable(item.image_id,context!!.theme))
             if(num >= checkboxlist.size)
                 checkboxlist.add(num, checkboxData(item.fitnessid, false))
             checkbox.isChecked = checkboxlist[num].checked

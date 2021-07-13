@@ -1,6 +1,7 @@
 package com.example.frontenddevelop
 
 import android.content.Context
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,9 @@ import android.view.animation.AnimationUtils
 import android.widget.CalendarView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -21,16 +25,20 @@ class Showgroupactivity : AppCompatActivity() {
     private lateinit var fab_main : FloatingActionButton
     private lateinit var fab_add : FloatingActionButton
     private lateinit var fab_remove : FloatingActionButton
+    private lateinit var fab_exit : FloatingActionButton
     private lateinit var fab_open : Animation
     private lateinit var fab_close : Animation
-    private lateinit var groupuserdata : MutableList<Userdataclass>
+    val groupuserdata = mutableListOf<Userdataclass>()
     private lateinit var useradapter : Useradapter
     private lateinit var groupdata : Groupdataclass
     private var isFabOpen = false
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_showgroupactivity)
 
+        Log.e("Break","Log4")
+        onPause()
         //intent받기
         if(intent!=null){
             val gd = intent.getParcelableExtra<Groupdataclass>("groupdata")
@@ -41,9 +49,11 @@ class Showgroupactivity : AppCompatActivity() {
             }
         }
 
+
         //플로팅버튼 설정
         fab_open = AnimationUtils.loadAnimation(baseContext, R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(baseContext, R.anim.fab_close);
+        fab_exit = findViewById(R.id.showgroupactivity_floatingbutton_exit)
         fab_main = findViewById(R.id.showgroupactivity_floatingbutton_main)
         fab_add = findViewById(R.id.showgroupactivity_floatingbutton_add)
         fab_remove = findViewById(R.id.showgroupactivity_floatingbutton_remove)
@@ -57,6 +67,15 @@ class Showgroupactivity : AppCompatActivity() {
         fab_remove.setOnClickListener { view ->
             toggleFab()
             //삭제
+            finish()
+        }
+        fab_exit.setOnClickListener { view ->
+            //탈퇴 기능
+            toggleFab()
+            groupdatalist.removeIf{
+                it._id == groupdata._id
+            }
+            groupadapter.notifyDataSetChanged()
             finish()
         }
 
@@ -77,23 +96,28 @@ class Showgroupactivity : AppCompatActivity() {
         if (isFabOpen) {
             fab_add.startAnimation(fab_close)
             fab_remove.startAnimation(fab_close)
+            fab_exit.startAnimation(fab_close)
             fab_add.setClickable(false)
             fab_remove.setClickable(false)
+            fab_exit.setClickable(false)
             isFabOpen = false
         } else {
             fab_add.startAnimation(fab_open)
             fab_remove.startAnimation(fab_open)
+            fab_exit.startAnimation(fab_open)
             fab_add.setClickable(true)
             fab_remove.setClickable(true)
+            fab_exit.setClickable(true)
             isFabOpen = true
         }
     }
 
     private fun initRecycler() {
         useradapter = Useradapter(baseContext)
-        groupuserdata = mutableListOf()
+        val userdata = Userdataclass(-1, "초기값", "정보", "소개", R.drawable.user)
+        groupuserdata.add(userdata)
         useradapter.userdatalist = groupuserdata
-        recyclerview.adapter = customadapter
+        recyclerview.adapter = useradapter
     }
 
     private fun refreshrecyclerview(date : String){
@@ -119,7 +143,6 @@ class Useradapter(private val context: Context) : RecyclerView.Adapter<Useradapt
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         private val username: TextView = itemView.findViewById(R.id.useritemlayout_username)
         private val userinform: TextView = itemView.findViewById(R.id.useritemlayout_inform)
         private val userimage: ImageView = itemView.findViewById(R.id.useritemlayout_image)
@@ -128,7 +151,7 @@ class Useradapter(private val context: Context) : RecyclerView.Adapter<Useradapt
         fun bind(item: Userdataclass, num:Int) {
             username.text = item.name
             userinform.text = item.inform
-            userimage.setImageBitmap(item.profile)
+            userimage.setImageDrawable(context.resources.getDrawable(item.profileid,context!!.theme))
             userintro.text = item.intro
             itemView.setOnClickListener{
                 Log.e("userfrag",num.toString())

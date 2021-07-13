@@ -8,7 +8,7 @@ object RetrofitClient {
     private var instance: Retrofit? = null
     private val gson = GsonBuilder().setLenient().create()
     // 서버 주소
-    private const val BASE_URL = "http://192.249.18.136:443"
+    private const val BASE_URL = "http://192.249.18.54:443"
 
     // SingleTon
     fun getInstance(): Retrofit {
@@ -18,7 +18,6 @@ object RetrofitClient {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
         }
-
         return instance!!
     }
 }

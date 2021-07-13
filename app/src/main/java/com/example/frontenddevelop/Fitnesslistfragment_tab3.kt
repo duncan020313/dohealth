@@ -40,7 +40,7 @@ class Fitnesslistfragment_tab3 : Fragment() {
         "바벨 풀오버","백 익스텐션","중량 하이퍼 익스텐션")
         datas.clear()
         for(i in back){
-            val value = Fitnessitemdata(back.indexOf(i)+200, i, requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme))
+            val value = Fitnessitemdata(back.indexOf(i)+200, i, R.drawable.pullup)
             datas.add(value)
         }
         customadapter.datas = datas

@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,7 +44,7 @@ class Rankingfragment : Fragment() {
     fun initRecycler(){
         val userdatalist = mutableListOf<Userdataclass>()
         for (i in 1..30){
-            val value = Userdataclass(i, i.toString(), "User$i","Hi",requireContext().resources.getDrawable(R.drawable.ic_launcher_background,requireContext().theme).toBitmap())
+            val value = Userdataclass(i, i.toString(), "User$i","Hi",R.drawable.user)
             userdatalist.add(value)
         }
         groupadapter.userdatalist = userdatalist
@@ -103,7 +105,7 @@ class rankingfragment_recyclerviewadapter(private val context: Context) : Recycl
         fun bind(item: Userdataclass, num:Int) {
             username.text = item.name
             userinform.text = item.inform
-            userimage.setImageBitmap(item.profile)
+            userimage.setImageDrawable(context!!.resources.getDrawable(item.profileid,context!!.theme))
             userintro.text = item.intro
             itemView.setOnClickListener{
                 Log.e("userfrag",num.toString())
