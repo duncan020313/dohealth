@@ -18,6 +18,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import retrofit2.Retrofit
 
 class Showgroupactivity : AppCompatActivity() {
     private lateinit var recyclerview : RecyclerView
@@ -31,6 +32,8 @@ class Showgroupactivity : AppCompatActivity() {
     val groupuserdata = mutableListOf<Userdataclass>()
     private lateinit var useradapter : Useradapter
     private lateinit var groupdata : Groupdataclass
+    private lateinit var retrofit : Retrofit
+    private lateinit var supplementService : RetrogitInterface
     private var isFabOpen = false
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,6 +132,11 @@ class Showgroupactivity : AppCompatActivity() {
         //여기서 날짜 선택하면 그걸 액티비티로 넘겨서 DB에서 새로운 데이터를 받아오기
         //DB에는 현재 추가한 데이터 저장
         //(activity as MainActivity).getDatafromDB()
+    }
+
+    private fun initRetrofit(){
+        retrofit = RetrofitClient.getInstance()
+        supplementService = retrofit.create(RetrogitInterface::class.java)
     }
 }
 

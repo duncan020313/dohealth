@@ -16,15 +16,22 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 
 class Addgroupactivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var fab_main : FloatingActionButton
+    private lateinit var retrofit : Retrofit
+    private lateinit var supplementService : RetrogitInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_addgroupactivity)
+        initRetrofit()
 
         //Action bar 설정하기
         var toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.addgroupactivity_toolbar);
@@ -70,6 +77,22 @@ class Addgroupactivity : AppCompatActivity() {
                     val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
                     groupdatalist.add(value)
                     groupadapter.notifyDataSetChanged()
+
+                    var map : HashMap<String, String> = HashMap()
+                    map.put("id", UserId) // 전연변수로 설정한 아이
+                    map.put("groupid", item._id.toString())
+
+                    supplementService.joingroup(map).enqueue(object:
+                        Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>){
+                            if(response.code() == 200 ) {Log.d("TAG", "join well")}
+                            else {Log.d("TAG", "Already you are in the group") }
+                        }
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.d("TAG", t.toString())
+                        }
+                    })
+
                     Toast.makeText(this, "가입되었습니다", Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -102,17 +125,42 @@ class Addgroupactivity : AppCompatActivity() {
                 val groupintro = groupintro.text.toString()
                 //DB에 그룹 데이터 추가해야됨
                 val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", groupintro, image)
+                Log.d("Breakpoint 1","")
+                var map : HashMap<String, String> = HashMap()
+
+                map.put("groupid", groupname.hashCode().toString())
+                map.put("groupname", groupname)
+                map.put("groupnumber", groupnumber)
+                map.put("groupthreshold", groupthreshold)
+                map.put("id", UserId)
+
+                supplementService.creategroup(map).enqueue(object: Callback<Void> {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.d("TAG - FAIL", t.toString()) }
+
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        Log.d("TAG", "SUCCESS") }
+                })
                 groupdatalist.removeLast()
                 groupdatalist.add(newgroup)
                 val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
                 groupdatalist.add(value)
                 groupadapter.notifyDataSetChanged()
+                Log.d("Breakpoint 2","")
+
+
+
                 finish()
             }
             .setNegativeButton("취소") { dialogInterface, i ->
                 /* 취소일 때 아무 액션이 없으므로 빈칸 */
             }
             .show()
+    }
+
+    private fun initRetrofit(){
+        retrofit = RetrofitClient.getInstance()
+        supplementService = retrofit.create(RetrogitInterface::class.java)
     }
 
 }

@@ -19,9 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.util.*
 import kotlin.collections.HashMap
-import kotlin.concurrent.timer
 
 
 var settimer = 60
@@ -63,21 +61,8 @@ class MainActivity : AppCompatActivity() {
 
         //intent받기
         if(intent!=null){
-            val checkboxdata = intent.getParcelableArrayListExtra<checkboxData>("checkboxlist")
-            if (checkboxdata != null) {
-                for(i in checkboxdata){
-                    if(i.checked == true){
-                        Log.e("checker",i.toString())
-                    }
-                }
-                val bundle = Bundle()
-                bundle.putParcelableArrayList("checkboxlist", checkboxdata)
-                calendarfragment.arguments=bundle
-                Log.e("check","send data to frag")
-            }
             val joingroupdata = intent.getParcelableExtra<Groupdataclass>("joingroup")
             if(joingroupdata!=null){
-
                 viewPager.currentItem = 2
             }
         }
@@ -97,7 +82,6 @@ class MainActivity : AppCompatActivity() {
     fun addpopupstart() {
         val intent = Intent(this, Addactivity::class.java)
         startActivity(intent)
-        finish()
     }
 
     fun addgroupstart() {
@@ -124,14 +108,14 @@ class MainActivity : AppCompatActivity() {
                     if(counttext.text.toString().isDigitsOnly() && weighttext.text.toString().isDigitsOnly()){
                         val countdata = counttext.text.toString().toInt()
                         val weightdata = weighttext.text.toString().toInt()
-                        val str= datas[customadapter.selectedid].inform
+                        val str= fitnessitemdatas[fitnessitemcustomadapter.selectedid].inform
                         val arr = str.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
                         val totalset = (arr[1].toInt()+1).toString()
                         val totalvolume =  (arr[3].toInt()+countdata*weightdata).toString()
                         val maxweight = if(arr[5].toInt() > weightdata) {arr[5]} else {weightdata.toString()}
                         val totalcount = (arr[7].toInt()+countdata).toString()
-                        customadapter.datas[customadapter.selectedid].inform = "세트 수: "+totalset+"세트 "+"운동볼륨: "+totalvolume+"Kg "+"최대 중량: "+maxweight+"Kg "+"총 개수: "+totalcount+"개"
-                        customadapter.notifyDataSetChanged()
+                        fitnessitemcustomadapter.datas[fitnessitemcustomadapter.selectedid].inform = "세트 수: "+totalset+"세트 "+"운동볼륨: "+totalvolume+"Kg "+"최대 중량: "+maxweight+"Kg "+"총 개수: "+totalcount+"개"
+                        fitnessitemcustomadapter.notifyDataSetChanged()
                         postdatatoDB()
                         //starttimerpopup()
                     }
@@ -151,9 +135,9 @@ class MainActivity : AppCompatActivity() {
     fun postdatatoDB(){
         val map : HashMap<String, String> = HashMap()
         val Workout: HashMap<String, String> = HashMap()
-        val inform= datas[customadapter.selectedid].inform
-        val name= datas[customadapter.selectedid].name
-        val workoutid= datas[customadapter.selectedid]._id
+        val inform= fitnessitemdatas[fitnessitemcustomadapter.selectedid].inform
+        val name= fitnessitemdatas[fitnessitemcustomadapter.selectedid].name
+        val workoutid= fitnessitemdatas[fitnessitemcustomadapter.selectedid]._id
         //val arr = inform.split("세트 수: ","세트 ","운동볼륨: ","Kg ","최대 중량: ","Kg ","총 개수: ","개")
 
         //Workout.put("workoutname", name.toString())
