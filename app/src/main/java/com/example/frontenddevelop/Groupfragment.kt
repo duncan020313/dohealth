@@ -15,13 +15,20 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 val groupdatalist = mutableListOf<Groupdataclass>()
 lateinit var groupadapter : groupfragment_recyclerviewadapter
 class Groupfragment : Fragment() {
+    private lateinit var retrofit : Retrofit
+    private lateinit var Service : RetrogitInterface
     private lateinit var recyclerview : RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initRetrofit()
     }
 
     override fun onCreateView(
@@ -39,7 +46,20 @@ class Groupfragment : Fragment() {
     }
 
     fun initRecycler(){
-        //DB에서 데이터 가져오기
+        var grouplist: ArrayList<String>
+        Service.myGroup(UserId).enqueue(object: Callback<ArrayList<String>> {
+            override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
+                if(response.code() == 200) {
+                    grouplist = response.body()!!
+                    Log.d("Tag", grouplist[0])
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<String>>, t: Throwable) {
+                Log.d("TAG", t.toString())
+            }
+        })
+
+
         if(groupdatalist.size==0){
             val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
             groupdatalist.add(value)
@@ -47,6 +67,11 @@ class Groupfragment : Fragment() {
         groupadapter.groupdatalist = groupdatalist
         recyclerview.adapter = groupadapter
         groupadapter.notifyDataSetChanged()
+    }
+
+    private fun initRetrofit(){
+        retrofit = RetrofitClient.getInstance()
+        Service = retrofit.create(RetrogitInterface::class.java)
     }
 }
 

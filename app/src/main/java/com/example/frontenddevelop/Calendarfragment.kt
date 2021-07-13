@@ -182,7 +182,6 @@ class Calendarfragment : Fragment(){
                 Log.d("TAGTAG", t.toString())
             }
         })
-
         //여기서 날짜 선택하면 그걸 액티비티로 넘겨서 DB에서 새로운 데이터를 받아오기
         //DB에는 현재 추가한 데이터 저장
         for(i in dailyReport){
