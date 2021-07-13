@@ -169,15 +169,12 @@ class Calendarfragment : Fragment(){
 
     private fun refreshrecyclerview(date : String){
         lateinit var dailyReport: ArrayList<String>
-        lateinit var dateprint : String
-        lateinit var datalist : ArrayList<HashMap<String, Any>>
         var mapp : HashMap<String, String> = HashMap()
         mapp.put("id", UserId) // 전연변수로 설정한 아이
         mapp.put("date", date)
 
         supplementService.reponsedata(mapp).enqueue(object: Callback<ArrayList<String>> {
             override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
-                //Log.d("Tag", dailyReport[0])
                 if(response.code() == 200) {
                     dailyReport = response.body()!!
                     Log.d("Tag", dailyReport[0])
@@ -187,10 +184,6 @@ class Calendarfragment : Fragment(){
                 Log.d("TAG", t.toString())
             }
         })
-
-        //여기서 날짜 선택하면 그걸 액티비티로 넘겨서 DB에서 새로운 데이터를 받아오기
-        //DB에는 현재 추가한 데이터 저장
-        //(activity as MainActivity).getDatafromDB()
     }
 
     private fun initRetrofit(){
