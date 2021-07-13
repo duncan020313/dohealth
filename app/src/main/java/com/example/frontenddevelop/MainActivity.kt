@@ -24,12 +24,12 @@ import kotlin.collections.HashMap
 import kotlin.concurrent.timer
 
 
+var settimer = 60
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private var calendarfragment = Calendarfragment()
     private lateinit var retrofit : Retrofit
     private lateinit var supplementService : RetrogitInterface
-    private var settimer = 60
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -175,23 +175,36 @@ class MainActivity : AppCompatActivity() {
     fun starttimerpopup(){
         val builder = AlertDialog.Builder(this)
         val dialogView = layoutInflater.inflate(R.layout.timerpopuplayout, null)
-        val alterdialog = builder.create()
+
         val minute = dialogView.findViewById<TextView>(R.id.timerpopuplayout_minute)
         val second = dialogView.findViewById<TextView>(R.id.timerpopuplayout_second)
-
         builder.setView(dialogView)
             .setNegativeButton("종료") { dialogInterface, i ->
 
-            }.show()
+            }
+        val alterdialog = builder.create()
+        alterdialog.show()
         val timer = object: CountDownTimer((settimer*1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val min = millisUntilFinished/60000
                 val sec = (millisUntilFinished%60000)/1000
-                minute.text = min.toString()
-                second.text = sec.toString()
+                if(min.toString().length==1){
+                    minute.text = "0"+min.toString()
+                }
+                else{
+                    minute.text = min.toString()
+                }
+                if(sec.toString().length==1){
+                    second.text = "0"+sec.toString()
+                }
+                else{
+                    second.text = sec.toString()
+                }
             }
-
-            override fun onFinish() {alterdialog.dismiss()}
+            override fun onFinish() {
+                Log.e("time", "end")
+                alterdialog.dismiss()
+            }
         }
         Log.e("time", "start")
         timer.start()
@@ -211,7 +224,6 @@ class MainActivity : AppCompatActivity() {
                 Log.e("settimer",settimer.toString())
             }
             .setNegativeButton("취소") { dialogInterface, i ->
-
             }
             .show()
     }

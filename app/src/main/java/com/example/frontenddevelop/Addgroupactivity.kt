@@ -51,6 +51,7 @@ class Addgroupactivity : AppCompatActivity() {
         fab_main.setOnClickListener { view ->
             showcreategrouppopup()
         }
+        fab_main.setColorFilter(R.color.white)
     }
 
     fun joingrouppopupstart(item : Groupdataclass){

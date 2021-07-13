@@ -8,19 +8,18 @@
     android:orientation="vertical"
     tools:context=".Calendarfragment">
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/teal_200"
         android:elevation="0dp"
         app:elevation="0dp"
         android:layout_gravity="center_horizontal">
-
         <CalendarView
             android:id="@+id/calendarView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             android:layout_margin="8dp"
-            android:background="#00FFFFFF"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
             android:elevation="0dp"
             app:layout_scrollFlags="scroll|snap|enterAlways" />
     </com.google.android.material.appbar.AppBarLayout>
