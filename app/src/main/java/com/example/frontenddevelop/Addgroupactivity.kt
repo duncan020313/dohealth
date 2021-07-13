@@ -92,7 +92,6 @@ class Addgroupactivity : AppCompatActivity() {
                             Log.d("TAG", t.toString())
                         }
                     })
-
                     Toast.makeText(this, "가입되었습니다", Toast.LENGTH_SHORT).show()
                     finish()
                 }
