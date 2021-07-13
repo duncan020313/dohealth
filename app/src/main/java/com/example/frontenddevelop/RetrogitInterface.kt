@@ -13,9 +13,6 @@ interface RetrogitInterface {
     @POST("/report")
     fun postReport(@Body map : HashMap<String, String>): Call<Void>
 
-    @POST("/group")
-    fun postGroup(@Body map : HashMap<String, Any>): Call<Void>
-
     @GET("/getnickname")
     fun getRequest(@Body id : String): Call<LoginResult> //give user Id and get user nickname
 
@@ -35,7 +32,8 @@ interface RetrogitInterface {
 
     @POST("/mygroup")
     fun myGroup(@Body id :String) : Call<ArrayList<String>>
-    //그룹 아이디 주면 그룹 아이디의 user 목록 받아줌
+    //userid 아이디 주면 그룹 아이디의 user 목록 받아줌
+
 
     @POST("/creategroup")
     fun creategroup(@Body map : HashMap<String, String>) : Call<Void>

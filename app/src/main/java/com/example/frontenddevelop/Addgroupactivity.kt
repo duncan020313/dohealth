@@ -31,6 +31,7 @@ class Addgroupactivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_addgroupactivity)
+        initRetrofit()
 
         //Action bar 설정하기
         var toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.addgroupactivity_toolbar);
@@ -83,14 +84,13 @@ class Addgroupactivity : AppCompatActivity() {
                     supplementService.joingroup(map).enqueue(object:
                         Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>){
-                            Log.d("TAG", "reponse well")
+                            if(response.code() == 200 ) {Log.d("TAG", "join well")}
+                            else {Log.d("TAG", "Already you are in the group") }
                         }
                         override fun onFailure(call: Call<Void>, t: Throwable) {
                             Log.d("TAG", t.toString())
                         }
                     })
-
-
 
                     Toast.makeText(this, "가입되었습니다", Toast.LENGTH_SHORT).show()
                     finish()
@@ -119,14 +119,35 @@ class Addgroupactivity : AppCompatActivity() {
                 val groupname = groupname_text.text.toString()
                 val groupnumber = groupnumber_text.text.toString()
                 val groupthreshold = groupthreshold_text.text.toString()
-                val image = R.drawable.group //원래는 이거 대신에 이미지 가져와야됨
+                val image = R.drawable.arm //원래는 이거 대신에 이미지 가져와야됨
                 //DB에 그룹 데이터 추가해야됨
+                Log.d("Breakpoint 1","")
+                var map : HashMap<String, String> = HashMap()
+
+                map.put("groupid", groupname.hashCode().toString())
+                map.put("groupname", groupname)
+                map.put("groupnumber", groupnumber)
+                map.put("groupthreshold", groupthreshold)
+                map.put("id", UserId)
+
+                supplementService.creategroup(map).enqueue(object: Callback<Void> {
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.d("TAG - FAIL", t.toString()) }
+
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        Log.d("TAG", "SUCCESS") }
+                })
+
                 val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", "소개글", image)
                 groupdatalist.removeLast()
                 groupdatalist.add(newgroup)
                 val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
                 groupdatalist.add(value)
                 groupadapter.notifyDataSetChanged()
+                Log.d("Breakpoint 2","")
+
+
+
                 finish()
             }
             .setNegativeButton("취소") { dialogInterface, i ->
