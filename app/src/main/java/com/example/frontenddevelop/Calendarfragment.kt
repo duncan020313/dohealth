@@ -180,11 +180,12 @@ class Calendarfragment : Fragment(){
         mapp.put("id", UserId) // 전연변수로 설정한 아이
         mapp.put("date", date)
         Log.d("breakpoint 2", date)
+        fitnessitemdatas.clear()
+        fitnessitemcustomadapter.notifyDataSetChanged()
         supplementService.reponsedata(mapp).enqueue(object: Callback<ArrayList<String>> {
             override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
                 if(response.code() == 200) {
                     dailyReport = response.body()!!
-                    fitnessitemdatas.clear()
                     Log.d("Tag", dailyReport[0])
                     for(i in dailyReport){
                         if (i== "none"){
@@ -218,8 +219,6 @@ class Calendarfragment : Fragment(){
                 Log.d("TAGTAG", t.toString())
             }
         })
-        //여기서 날짜 선택하면 그걸 액티비티로 넘겨서 DB에서 새로운 데이터를 받아오기
-        //DB에는 현재 추가한 데이터 저장
 
     }
 

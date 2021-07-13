@@ -46,6 +46,7 @@ class Groupfragment : Fragment() {
     }
 
     fun initRecycler(){
+
         var grouplist: ArrayList<String>
         Service.myGroup(UserId).enqueue(object: Callback<ArrayList<String>> {
             override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
