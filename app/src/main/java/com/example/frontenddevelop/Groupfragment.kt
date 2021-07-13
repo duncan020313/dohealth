@@ -54,18 +54,20 @@ class Groupfragment : Fragment() {
         groupadapter.groupdatalist = groupdatalist
         recyclerview.adapter = groupadapter
         groupadapter.notifyDataSetChanged()
-        var grouplist: ArrayList<String>
+        var grouplist: ArrayList<HashMap<String, String>>
         var map : HashMap<String, String> = HashMap()
         map.put("id" , UserId )
         Log.e("breakpoint1",UserId)
-        Service.myGroup(map).enqueue(object: Callback<ArrayList<String>> {
-            override fun onResponse(call: Call<ArrayList<String>>, response: Response<ArrayList<String>>){
+        Service.myGroup(map).enqueue(object: Callback<ArrayList<HashMap<String, String>>> {
+            override fun onResponse(call: Call<ArrayList<HashMap<String, String>>>, response: Response<ArrayList<HashMap<String, String>>>){
                 if(response.code() == 200) {
                     grouplist = response.body()!!
-                    Log.d("Tag", grouplist[0])
+                    Log.d("TAG", grouplist[0].toString())
+
+
                 }
             }
-            override fun onFailure(call: Call<ArrayList<String>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<HashMap<String, String>>>, t: Throwable) {
                 Log.d("TAG", t.toString())
             }
         })

@@ -31,7 +31,7 @@ interface RetrogitInterface {
     //그룹 아이디 주면 그룹 아이디의 user 목록 받아줌
 
     @POST("/mygroup")
-    fun myGroup(@Body map :HashMap<String, String> ) : Call<ArrayList<String>>
+    fun myGroup(@Body map :HashMap<String, String> ) : Call<ArrayList<HashMap<String, String>>>
     //userid 아이디 주면 그룹 아이디의 user 목록 받아줌
 
 

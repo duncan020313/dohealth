@@ -58,6 +58,7 @@ class Addgroupactivity : AppCompatActivity() {
         fab_main.setOnClickListener { view ->
             showcreategrouppopup()
         }
+        fab_main.setColorFilter(R.color.white)
     }
 
     fun joingrouppopupstart(item : Groupdataclass){
@@ -91,7 +92,6 @@ class Addgroupactivity : AppCompatActivity() {
                             Log.d("TAG", t.toString())
                         }
                     })
-
                     Toast.makeText(this, "가입되었습니다", Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -109,6 +109,7 @@ class Addgroupactivity : AppCompatActivity() {
         val groupnumber_text = dialogView.findViewById<EditText>(R.id.creategrouppopup_number)
         val groupthreshold_text = dialogView.findViewById<EditText>(R.id.creategrouppopup_threshold)
         val groupprofile_imagebutton = dialogView.findViewById<ImageButton>(R.id.creategrouppopup_profile)
+        val groupintro = dialogView.findViewById<EditText>(R.id.creategrouppopup_intro)
         groupprofile_imagebutton.setOnClickListener {
             //이미지 불러오기
             Log.e("clicked","이미지 가져오기")
@@ -119,8 +120,10 @@ class Addgroupactivity : AppCompatActivity() {
                 val groupname = groupname_text.text.toString()
                 val groupnumber = groupnumber_text.text.toString()
                 val groupthreshold = groupthreshold_text.text.toString()
-                val image = R.drawable.arm //원래는 이거 대신에 이미지 가져와야됨
+                val image = R.drawable.group //원래는 이거 대신에 이미지 가져와야됨
+                val groupintro = groupintro.text.toString()
                 //DB에 그룹 데이터 추가해야됨
+<<<<<<< HEAD
 
 
                 val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", "소개글", image)
@@ -129,6 +132,9 @@ class Addgroupactivity : AppCompatActivity() {
 
                 val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
 
+=======
+                val newgroup = Groupdataclass(groupname.hashCode(), groupname, "최대 인원: "+groupnumber+"명 하루 목표: "+groupthreshold+"세트", groupintro, image)
+>>>>>>> 2f866dd5f546fb930e7257d5c4a2c1a8cd7b0613
                 Log.d("Breakpoint 1","")
                 var map : HashMap<String, String> = HashMap()
 
@@ -145,8 +151,14 @@ class Addgroupactivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         Log.d("TAG", "SUCCESS") }
                 })
+<<<<<<< HEAD
 
 
+=======
+                groupdatalist.removeLast()
+                groupdatalist.add(newgroup)
+                val value = Groupdataclass(-1, "Add", "","",R.drawable.plus)
+>>>>>>> 2f866dd5f546fb930e7257d5c4a2c1a8cd7b0613
                 groupdatalist.add(value)
                 groupadapter.notifyDataSetChanged()
                 Log.d("Breakpoint 2","")

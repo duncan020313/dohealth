@@ -52,6 +52,11 @@ class Showgroupactivity : AppCompatActivity() {
             }
         }
 
+        //그룹 정보, 소개글 설정
+        val inform = findViewById<TextView>(R.id.showgroupactivity_inform)
+        val intro  =findViewById<TextView>(R.id.showgroupactivity_intro)
+        inform.text = groupdata.inform
+        intro.text = groupdata.intro
 
         //플로팅버튼 설정
         fab_open = AnimationUtils.loadAnimation(baseContext, R.anim.fab_open);

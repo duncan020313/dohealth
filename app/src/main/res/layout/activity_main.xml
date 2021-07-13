@@ -11,6 +11,7 @@
     <Toolbar
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/toolbar"
+        android:background="@color/teal_200"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,6 +20,8 @@
                 android:layout_height="wrap_content"
                 android:text="운동하세요"
                 android:textSize="11pt"
+                android:textStyle="bold"
+                android:textColor="@color/white"
                 android:layout_gravity="center"/>
     </Toolbar>
     <androidx.viewpager2.widget.ViewPager2
