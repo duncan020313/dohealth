@@ -43,8 +43,9 @@ class Rankingfragment : Fragment() {
 
     fun initRecycler(){
         val userdatalist = mutableListOf<Userdataclass>()
-        for (i in 1..30){
-            val value = Userdataclass(i, i.toString(), "User$i","Hi",R.drawable.user)
+        val userlist = listOf("김계란","삼두왕","이두왕","둔근둔근","궁동근육왕","카이스트신뢰관관장","헬창꿈나무","헬린")
+        for (i in userlist){
+            val value = Userdataclass(i.hashCode(), i.toString(), "User$i","Hi",R.drawable.user)
             userdatalist.add(value)
         }
         groupadapter.userdatalist = userdatalist

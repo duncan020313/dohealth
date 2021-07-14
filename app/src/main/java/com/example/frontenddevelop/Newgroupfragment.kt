@@ -35,8 +35,9 @@ class Newgroupfragment : Fragment() {
     fun initRecycler(){
         //여기서 db에서 데이터 받아오면 됩니다.
         val groupdatalist = mutableListOf<Groupdataclass>()
-        for (i in 1..10){
-            val value = Groupdataclass(i, i.toString(), "Hello","Hi",R.drawable.group)
+        val groups = listOf("신뢰관 모여랏", "아침 운동할 사람~~", "유튭으로 홈트 조지실분","혼자 운동하기 싫어여..")
+        for (i in groups){
+            val value = Groupdataclass(groups.hashCode(), i.toString(), "Hello","Hi",R.drawable.group)
             groupdatalist.add(value)
         }
         groupadapter.groupdatalist = groupdatalist
