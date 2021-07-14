@@ -5,17 +5,23 @@
 혼자서 하는 운동은 그 의지가 쉽게 사라지지만 다른 사람과 함께 함으로써 서로가 경쟁자이자 팀이 되어 당신의 운동 의지를 더욱 강하게 만들어 줄 것입니다.   
 ## 앱 설명
 ### Tab 1 : 랭킹
-여기에 사진   
+<img src = https://user-images.githubusercontent.com/58449555/125558493-b18c1a11-d838-446e-ad17-697b8ecf9804.jpg width="30%" height="30%">
+
+
 * 유저 별 랭킹 시스템을 도입해 유저들간의 경쟁으로 강한 운동 의지를 가질 수 있도록 했다.   
 * 운동을 얼마나 꾸준히, 많이 했는지를 기준으로 순위를 매겼다.   
 ### Tab 2 : 운동 일지
-여기에 사진   
+<img src = https://user-images.githubusercontent.com/58449555/125558488-8837f850-b925-434a-9f58-247bdfb958e9.jpg width="30%" height="30%">
+<img src = https://user-images.githubusercontent.com/58449555/125558495-7741f5ef-a26e-4ba0-9a11-a49487001eb9.jpg width="30%" height="30%">
 * 오늘 한 운동을 기록할 수 있는 운동일지를 제작했다.   
 * 세트 단위로 운동을 기록할 수 있다. 세트 수, 운동 볼륨, 최대 중량, 총 횟수를 기록해준다.   
 * 한 세트가 끝나면 설정한 시간에 따라 타이머가 작동한다.   
 * 운동의 추가 및 삭제는 Floatingactionbutton으로 할 수 있다.   
 ### Tab 3 : 운동 그룹 
-여기에 사진    
+<img src = https://user-images.githubusercontent.com/58449555/125558484-aa9e5da5-e76a-4a34-ada0-f05808eb38e1.jpg width="30%" height="30%">
+<img src = https://user-images.githubusercontent.com/58449555/125558491-a1e9018c-6a16-4a8d-b8ae-f966f9f81fba.jpg width="30%" height="30%">
+<img src = https://user-images.githubusercontent.com/58449555/125558476-7fd9922f-5d99-4587-9ed8-03573db35fdf.jpg width="30%" height="30%">
+<img src = https://user-images.githubusercontent.com/58449555/125558496-e071e238-9f66-4b94-9fa3-4a6f8ce6b5d4.jpg width="30%" height="30%">
 * 이 앱의 핵심 기능으로, 비슷한 운동 목적과 목표를 가진 사람들 끼리 그룹을 구성하여, 서로가 운동을 얼마나 했는지 볼 수 있다.   
 * 또한, Progressbar로 그룹 전체의 운동 목표 달성 정도를 보여주어, 그룹 구성원간의 운동 의지를 강화시킨다.   
 * 운동 목표 달성도, 운동 볼륨, 운동 달성도 등을 기준으로 그룹을 Sorting해서 보여준다.   
