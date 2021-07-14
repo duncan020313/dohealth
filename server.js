@@ -6,6 +6,7 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.json());
 
 
+
 app.listen(443, function(){
     console.log('Server is running...')
 })
@@ -18,7 +19,7 @@ app.listen(443, function(){
         const myDb = client.db('gohealth')
         const collection_user = myDb.collection('user')
         const collection_report = myDb.collection('report') 
-        const collection_group = myDb.collection('group')
+        const collection_group = myDb.collection('GGGGG')
         const group_users = myDb.collection('group_users')
 
         app.post('/join', (req, res) => {
@@ -41,18 +42,18 @@ app.listen(443, function(){
             const newReport = {
                 id : req.body.id,
                 report: [req.body.Report],
-                Jan:int(0),
-                Feb:int(0),
-                Mar:int(0),
-                Apr:int(0),
-                May:int(0),
-                Jun:int(0),
-                Jul:int(0),
-                Aug:int(0),
-                Sep:int(0),
-                Oct:int(0),
-                Nov:int(0),
-                Dec:int(0)
+                Jan:parseInt(0),
+                Feb:parseInt(0),
+                Mar:parseInt(0),
+                Apr:parseInt(0),
+                May:parseInt(0),
+                Jun:parseInt(0),
+                Jul:parseInt(0),
+                Aug:parseInt(0),
+                Sep:parseInt(0),
+                Oct:parseInt(0),
+                Nov:parseInt(0),
+                Dec:parseInt(0)
             }
 
             const query = {id : req.body.id}
@@ -91,6 +92,7 @@ app.listen(443, function(){
                                     case '11':  collection_report.Nov++
                                     case '12':  collection_report.Dec++
                           } 
+                          console.log("---------------------------rangk------------------------")
                           console.log(collection_report.Jul)        
                 }
             }
@@ -105,24 +107,31 @@ app.listen(443, function(){
                     })  
         })
 
-        app.post('/mygroup', (req, res) => {
-            console.log(req.body.id)
+        app.post('/mygroup',  (req, res) => {
+                var grouplist = []
+                var returnlist =[]
 
-            group_users.find({[req.body.id] : { $exists : true } }, (err, result) =>{
-                console.log(result)
-                console.log("---------mtgroup-------------")
+                group_users.find({}).toArray( function(err, result){
+                if(result != null){
 
-                res.send(result)
-            })
-            /*
-            collection_group.findOne({id: req.body}, (err, result) => {
-                if(result.length !=0 ) 
-                res.status(200).send(result[0].group)
-                else{
-                    res.send(result[0].group)
+                for(var i=0; i<result.length; i++){
+                    var re = Object.keys(result[i]).map((key) => [Number(key), result[i][key]]);
+                    grouplist.push(re[0][1])
 
+                        collection_group.findOne({groupid : re[0][1]}, (err, result1) =>{
+                            //var groupitem = Object.keys(result).map((key) => [Number(key), result[key]]);
+                            returnlist.push(result1)
+                    })
                 }
-            })*/
+            }
+
+                //setTimeout(function() { 
+                    //res.status(200).send(returnlist)
+                    //console.log(returnlist) }, 100);
+   
+            }
+            )
+            
         })
 
         app.post('/creategroup', (req, res) => {
